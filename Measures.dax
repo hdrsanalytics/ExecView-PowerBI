@@ -1,0 +1,68 @@
+Total Sales =
+SUM ( FactSales[Sales] )
+
+Total Profit =
+SUM ( FactSales[Profit] )
+
+Profit Margin =
+DIVIDE ( [Total Profit], [Total Sales] )
+
+Total Orders =
+DISTINCTCOUNT ( FactSales[OrderID] )
+
+Order Lines =
+COUNTROWS ( FactSales )
+
+Units Sold =
+SUM ( FactSales[Quantity] )
+
+Average Order Value =
+DIVIDE ( [Total Sales], [Total Orders] )
+
+Average Discount =
+AVERAGE ( FactSales[Discount] )
+
+Returned Orders =
+CALCULATE (
+    DISTINCTCOUNT ( FactSales[OrderID] ),
+    FactSales[Returned] = TRUE ()
+)
+
+Return Rate =
+DIVIDE ( [Returned Orders], [Total Orders] )
+
+Sales Target =
+SUM ( FactTargets_Illustrative[TargetSales] )
+
+Target Variance =
+[Total Sales] - [Sales Target]
+
+Target Attainment % =
+DIVIDE ( [Total Sales], [Sales Target] )
+
+Sales Previous Year =
+CALCULATE ( [Total Sales], SAMEPERIODLASTYEAR ( DimDate[Date] ) )
+
+Sales YoY Change =
+[Total Sales] - [Sales Previous Year]
+
+Sales YoY % =
+DIVIDE ( [Sales YoY Change], [Sales Previous Year] )
+
+Profit Previous Year =
+CALCULATE ( [Total Profit], SAMEPERIODLASTYEAR ( DimDate[Date] ) )
+
+Profit YoY Change =
+[Total Profit] - [Profit Previous Year]
+
+Profit YoY % =
+DIVIDE ( [Profit YoY Change], [Profit Previous Year] )
+
+Average Shipping Days =
+AVERAGEX (
+    FactSales,
+    DATEDIFF ( FactSales[OrderDate], FactSales[ShipDate], DAY )
+)
+
+Unprofitable Sales =
+CALCULATE ( [Total Sales], FactSales[Profit] < 0 )
